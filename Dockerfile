@@ -1,8 +1,9 @@
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get install -y openssh-server python python-flask python-pip git vim
+RUN apt-get update && apt-get install -y openssh-server python python-flask python-pip git vim tmux
 RUN pip install -U pytest
 RUN pip install pytest-bdd
+RUN pip install pytest-flask
 RUN pip install --upgrade pip
 RUN mkdir /var/run/sshd
 RUN echo 'root:secretpassword' | chpasswd
