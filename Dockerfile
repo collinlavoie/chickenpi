@@ -1,8 +1,13 @@
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get install -y openssh-server python python-flask python-pip git vim
+RUN apt-get update && apt-get install -y openssh-server python python-flask python-pip git vim curl tmux firefox
 RUN pip install -U pytest
 RUN pip install pytest-bdd
+RUN pip install pytest-flask
+RUN pip install selenium
+RUN wget $(echo http://github.com$(curl -sL  https://github.com/mozilla/geckodriver/releases/latest | grep -Eo '/mozilla.*linux64.tar.gz'))
+RUN tar -xvzf geckodriver-*.tar.gz && rm geckodriver-*.tar.gz
+RUN export PATH=$PATH:$(pwd)
 RUN pip install --upgrade pip
 RUN mkdir /var/run/sshd
 RUN echo 'root:secretpassword' | chpasswd
