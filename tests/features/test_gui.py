@@ -29,9 +29,8 @@ def i_access_the_webpage(client):
     html_doc = rv.data
     soup = BeautifulSoup(html_doc, 'html.parser')
     expected = ur'\d+\.\d+ \u2103'
-    actual = soup.find("div", {"id": "temp"}).text
-
-    assert re.match(expected, actual)
+    assert soup.find("div", {"id": "temp"})
+    assert re.match(expected, soup.find("div", {"id": "temp"}).text)
 
 @when('I obtain the list of div elements')
 def i_obtain_the_list_of_div_elements():

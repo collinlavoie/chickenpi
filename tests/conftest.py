@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from chickenstrumentation import app
+from chickenstrumentation.app import app
 
 
 @pytest.fixture
