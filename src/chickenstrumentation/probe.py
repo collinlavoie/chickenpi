@@ -2,7 +2,7 @@ from subprocess import check_output
 
 class Reader(object):
 
-    PROBE_BIN="bin/get_temp.sh"
+    PROBE_BIN="../bin/get_temp.sh"
 
     @classmethod
     def get_data(cls):
@@ -11,7 +11,7 @@ class Reader(object):
     @classmethod
     def read_probes(cls):
         try:
-            return check_output([PROBE_BIN])
+            return check_output([cls.PROBE_BIN])
         except:
             return []
 
