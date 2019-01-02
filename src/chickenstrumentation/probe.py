@@ -13,5 +13,5 @@ class Reader(object):
         try:
             return check_output([PROBE_BIN])
         except:
-            pass
+            return []
 

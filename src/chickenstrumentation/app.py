@@ -1,9 +1,7 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
-
-from flask import render_template
-
+from chickenstrumentation import probe
 
 @app.route('/')
 def index():
@@ -11,4 +9,5 @@ def index():
 
 @app.route('/temp/')
 def temp():
-    return render_template('temp.html')
+    data = probe.Reader.get_data()
+    return render_template('temp.html', data=data)
