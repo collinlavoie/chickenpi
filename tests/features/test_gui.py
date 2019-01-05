@@ -12,6 +12,7 @@ from pytest_bdd import (
     scenario,
     then,
     when,
+    parsers,
 )
 
 @scenario('gui.feature', 'Viewing the page')
@@ -20,32 +21,42 @@ def test_viewing_the_page():
 
 # Fixtures
 
-@given('I access the webpage')
-def i_access_the_webpage(client, mocker):
-    """I obtain the temperature reading."""
+@given('The probes read 123')
+def the_probes_read_123():
+    print "shit"
 
-    output=[{"sensor": "28-000007a81e55",
-           "temp": "6.500",
-           "time": "2019-01-08 23:05:02"}]
-    mocker.patch("chickenstrumentation.app.probe.Reader.get_data")
-    Reader.get_data.return_value = output
 
+@given(parsers.parse('The probes read:\n{text}'))
+@given(parsers.parse('The probes read: {text}'))
+def probes_reading(text):
+    print "Inside probes_reading...", text
+    return text
+
+@given('I access the page', target_fixture="page_response")
+def i_access_the_page(mocker, client, probes_reading):
+    print "Inside i_access_the_page...", probes_reading
+    mocker.patch("chickenstrumentation.app.probe.Reader.read_probes")
+    Reader.read_probes.return_value = probes_reading
     rv = client.get('/temp/')
-    html_doc = rv.data
+    print "after client.get"
+    return rv
+
+@then(parsers.parse('I should have a div with id: {div_id}'))
+def i_have_div_with_id(page_response, div_id):
+    print "Inside i_have_div_with_id...", div_id
+    html_doc = page_response.data
     soup = BeautifulSoup(html_doc, 'html.parser')
-    Reader.get_data.assert_called_once_with()
-    assert soup.find("div", {"id": "temp"})
+    assert soup.find("div", {"id": div_id})
+
+@then(parsers.parse('I should see temperature: {temp}'))
+def i_should_see_temperature(page_response, temp):
+    html_doc = page_response.data
+    soup = BeautifulSoup(html_doc, 'html.parser')
+    assert re.match(ur"1.12 \u2103", soup.find("div", {"id": "temp"}).text)
+
+@then('I should see a temperature reading')
+def i_see_a_temp_reading(page_response):
+    html_doc = page_response.data
+    soup = BeautifulSoup(html_doc, 'html.parser')
     expected = ur'\d+\.\d+ \u2103'
     assert re.match(expected, soup.find("div", {"id": "temp"}).text)
-    assert re.match(ur"6.50 \u2103", soup.find("div", {"id": "temp"}).text)
-
-
-@when('I obtain the list of div elements')
-def i_obtain_the_list_of_div_elements():
-    """I obtain the list of div elements."""
-
-
-@then('I should have a div with id "temperature"')
-def i_should_have_a_div_with_id_temperature():
-    """I should have a div with id "temperature"."""
-

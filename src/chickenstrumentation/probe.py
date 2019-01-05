@@ -8,7 +8,12 @@ class Reader(object):
 
     @classmethod
     def get_data(cls):
-        return cls.read_probes()
+        probe_data = cls.read_probes()
+        data = []
+        for sample in probe_data.splitlines():
+            ( time, sensor, temp ) = sample.split(',')
+            data.append({'sensor': sensor, 'time':time, 'temp':temp})
+        return data
 
     @classmethod
     def read_probes(cls):

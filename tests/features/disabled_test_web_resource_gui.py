@@ -14,7 +14,7 @@ from pytest_bdd import (
     when,
 )
 
-@scenario('gui.feature', 'Viewing the page')
+@scenario('gui_resource.feature', 'Viewing the page')
 def test_viewing_the_page():
     """Viewing the page."""
 
