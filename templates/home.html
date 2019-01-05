@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Chickenstrumentation</h1>
+
+<style>
+#table {
+display:table;
+border-spacing:.5em;
+}
+.row {display:table-row; }
+.cell{
+display:table-cell;
+
+}
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div id="table">
+  {% for sample in data %}
+    <div class="row">
+      <div class="cell">{{sample.time}}:</div>
+      <div class="cell"><strong>{{'%0.2f'| format(sample.temp|float)}} &#8451;</strong></div>
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}
