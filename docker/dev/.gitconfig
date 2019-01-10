@@ -1,0 +1,8 @@
+[alias]
+        a = add
+        d = diff
+        aliases = config --global --list
+        s = status
+        co = checkout
+        b = branch
+        c = commit
