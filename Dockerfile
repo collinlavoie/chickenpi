@@ -16,12 +16,11 @@ COPY .gitconfig /etc/skel/.gitconfig
 
 RUN useradd -m -s /bin/bash developper
 RUN echo 'developper:mysecretpassword' | chpasswd
-COPY .ssh/ /home/developper/
-COPY gitclone.sh /home/developper/
-RUN chown -R developper:developper /home/developper/
-RUN chmod 0600 /home/developper/.ssh/agent.env
-RUN chmod 0600 /home/developper/.ssh/id_rsa
-RUN chmod +x /home/developper/gitclone.sh
+RUN whoami
+USER developper
+RUN git clone https://github.com/collinlavoie/chickenstrumentation.git /etc/skel/chickenstrumentation
+RUN whoami
+
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
