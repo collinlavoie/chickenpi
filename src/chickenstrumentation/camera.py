@@ -1,44 +1,30 @@
-from subprocess import check_output
-import urllib2
-import json
+from picamera import PiCamera
+import time
+from time import sleep
+import os
+from os.path import expanduser
+
+
 
 class Reader(object):
 
-    PROBE_BIN="../bin/get_temp.sh"
+    BASE_PATH = expanduser("~")
 
     @classmethod
-    def get_data(cls):
-        probe_data = cls.read_probes()
-        data = []
-        for sample in probe_data.splitlines():
-            ( time, sensor, temp ) = sample.split(',')
-            data.append({'sensor': sensor, 'time':time, 'temp':temp})
-        return data
+    def get_image(cls):
+        image_path = cls.capture_image()
+        return image_path
 
     @classmethod
-    def read_probes(cls):
-        try:
-            return check_output([cls.PROBE_BIN])
-        except:
-            return []
+    def capture_image(cls):
+        image_path = os.path.join(
+                cls.BASE_PATH,
+                'image.{}.jpg'.format(time.strftime("%Y%m%dT%Hh%Mm%Ss"))
+                )
+        camera = PiCamera()
 
-class WebReader(Reader):
-
-    @classmethod
-    def get_web_resource(cls):
-        content = urllib2.urlopen("http://chickenstrumentation/1h").read()
-        # get data for desired probe
-        data = [x for x in json.loads(content)]
-        return data
-
-    @classmethod
-    def get_data(cls):
-        return cls.read_probes()
-
-    @classmethod
-    def read_probes(cls):
-         return cls.get_web_resource()
-#        try:
-#        except:
-#            return []
-
+        camera.start_preview()
+        sleep(5)
+        camera.capture(image_path)
+        camera.stop_preview()
+        return image_path

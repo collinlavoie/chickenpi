@@ -1,5 +1,6 @@
 # coding=utf-8
 """Interfacing with the camera feature tests."""
+import os
 
 from pytest_bdd import (
     given,
@@ -8,18 +9,27 @@ from pytest_bdd import (
     when,
 )
 
+from chickenstrumentation.camera import Reader
 
 @scenario('camera.feature', 'Obtain image from camera')
 def test_obtain_image_from_camera():
     """Obtain image from camera."""
 
 
+#@given('The camera takes a picture')
+#def the_camera_takes_a_picture(mocker):
+#    """An image is obtained from the camera."""
+#    mocker.patch("chickenstrumentation.camera.Reader.capture_image")
+#    image = Reader.get_image()
+#    print image
+#    Reader.capture_image.assert_called_once_with()
+
 @given('An image is obtained from the camera')
 def an_image_is_obtained_from_the_camera():
     """An image is obtained from the camera."""
-    mocker.patch("chickenstrumentation.camera.Reader.get_image")
-    image = Reader.get_image()
-    Reader.read_probes.assert_called_once_with()
+    image_path = Reader.get_image()
+    assert os.path.exists(image_path)
+    return image_path
 
 @when('I access the webpage')
 def i_access_the_webpage():
