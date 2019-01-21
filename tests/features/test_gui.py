@@ -23,27 +23,23 @@ def test_viewing_the_page():
 
 @given('The probes read 123')
 def the_probes_read_123():
-    print "shit"
+    """The probes read 123"""
 
 
 @given(parsers.parse('The probes read:\n{text}'))
 @given(parsers.parse('The probes read: {text}'))
 def probes_reading(text):
-    print "Inside probes_reading...", text
     return text
 
 @given('I access the page', target_fixture="page_response")
 def i_access_the_page(mocker, client, probes_reading):
-    print "Inside i_access_the_page...", probes_reading
     mocker.patch("chickenstrumentation.app.probe.Reader.read_probes")
     Reader.read_probes.return_value = probes_reading
     rv = client.get('/temp/')
-    print "after client.get"
     return rv
 
 @then(parsers.parse('I should have a div with id: {div_id}'))
 def i_have_div_with_id(page_response, div_id):
-    print "Inside i_have_div_with_id...", div_id
     html_doc = page_response.data
     soup = BeautifulSoup(html_doc, 'html.parser')
     assert soup.find("div", {"id": div_id})

@@ -15,7 +15,6 @@ from chickenstrumentation.camera import Reader
 def test_obtain_image_from_camera():
     """Obtain image from camera."""
 
-
 #@given('The camera takes a picture')
 #def the_camera_takes_a_picture(mocker):
 #    """An image is obtained from the camera."""
@@ -25,9 +24,10 @@ def test_obtain_image_from_camera():
 #    Reader.capture_image.assert_called_once_with()
 
 @given('An image is obtained from the camera')
-def an_image_is_obtained_from_the_camera():
+
+def an_image_is_obtained_from_the_camera(camera):
     """An image is obtained from the camera."""
-    image_path = Reader.get_image()
+    image_path = camera.get_image()
     assert os.path.exists(image_path)
     return image_path
 

@@ -20,7 +20,7 @@ class Reader(object):
         try:
             return check_output([cls.PROBE_BIN])
         except:
-            return []
+            return ""
 
 class WebReader(Reader):
 

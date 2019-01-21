@@ -5,26 +5,27 @@ import os
 from os.path import expanduser
 
 
-
 class Reader(object):
 
-    BASE_PATH = expanduser("~")
+    _base_path = expanduser("~")
 
-    @classmethod
-    def get_image(cls):
-        image_path = cls.capture_image()
+    def __init__(self, base_path=None):
+        if base_path:
+            self._base_path = base_path
+
+    def get_image(self):
+        image_path = self.capture_image()
         return image_path
 
-    @classmethod
-    def capture_image(cls):
+    def capture_image(self):
         image_path = os.path.join(
-                cls.BASE_PATH,
+                self._base_path,
                 'image.{}.jpg'.format(time.strftime("%Y%m%dT%Hh%Mm%Ss"))
                 )
-        camera = PiCamera()
+        with PiCamera() as camera:
+            camera.start_preview()
+            sleep(5)
+            camera.capture(image_path)
+            camera.stop_preview()
 
-        camera.start_preview()
-        sleep(5)
-        camera.capture(image_path)
-        camera.stop_preview()
         return image_path

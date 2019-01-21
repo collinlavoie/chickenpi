@@ -1,10 +1,21 @@
 
 import os
 import tempfile
-
+import shutil
 import pytest
 
 from chickenstrumentation.app import app
+from chickenstrumentation.camera import Reader
+
+
+@pytest.fixture
+def camera():
+    app.config['CAMERA'] = tempfile.mkdtemp()
+    camera = Reader(app.config['CAMERA'])
+
+    yield camera
+
+    shutil.rmtree(app.config['CAMERA'])
 
 
 @pytest.fixture
