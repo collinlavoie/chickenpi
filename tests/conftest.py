@@ -12,7 +12,7 @@ from chickenstrumentation.camera import Reader
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
-from selenium.webdriver import Firefox
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 
 
@@ -58,9 +58,12 @@ def server():
 
 @pytest.fixture
 def browser():
-    options = Options()
-    options.add_argument("--headless")
-    b = Firefox(options=options)
+    options = webdriver.ChromeOptions()
+    options.add_argument("-disable-gpu")
+    options.add_argument("-headless")
+    b = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver',
+        chrome_options=options,
+	)
     b.implicitly_wait(10)
     yield b
     b.quit()

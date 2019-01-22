@@ -25,7 +25,9 @@ def test_viewing_the_page():
 def interact_with_page(server, route, browser):
     print "Interact with page: {}".format(route)
     url = server.check_url + route
+    print url
     browser.get(url)
+    browser.save_screenshot('screenshot.png')
 
 @when("I click the capture button")
 def i_click_the_capture_button(server, browser):
