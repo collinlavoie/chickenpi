@@ -7,11 +7,9 @@ Feature: Camera imaging in web page
 #   And I should have a div with id: capture
 
 Scenario: Viewing the page
-    Given I obtain a capture image
-    #And I access the page
-    #And I should see a capture image in div with id: capture
-
-			    
+    Given I want to interact with web page: /view/ 
+    When I click the capture button
+    Then I should see an image in div id: capture
 
 #Scenario: Viewing the page
 #    Given I obtain the following image from the camera:

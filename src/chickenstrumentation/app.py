@@ -16,3 +16,11 @@ def temp():
 def web_temp():
     data = probe.WebReader.get_data()
     return render_template('temp.html', data=data)
+
+if __name__ == '__main__':
+
+    # This does nothing unless you run this module with --liveandletdie flag.
+    import liveandletdie
+    liveandletdie.Flask.wrap(app)
+
+    app.run()

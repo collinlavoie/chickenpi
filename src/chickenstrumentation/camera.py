@@ -24,8 +24,11 @@ class Reader(object):
                 )
         with PiCamera() as camera:
             camera.start_preview()
-            sleep(5)
+            sleep(2)
             camera.capture(image_path)
             camera.stop_preview()
 
         return image_path
+
+    def capture_video(self):
+        pass

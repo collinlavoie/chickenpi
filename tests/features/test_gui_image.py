@@ -21,10 +21,24 @@ def test_viewing_the_page():
     """Viewing the page."""
 
 
-@given('I access the page', target_fixture="page_response")
-def i_access_the_page(mocker, client):
-    """I access the page."""
-    rv = client.get('/temp/')
+@given(parsers.parse('I want to interact with web page: {route}'), target_fixture="brower")
+def interact_with_page(server, route, browser):
+    print "Interact with page: {}".format(route)
+    url = server.check_url + route
+    browser.get(url)
+
+@when("I click the capture button")
+def i_click_the_capture_button(server, browser):
+    pass
+
+@then(parsers.parse("I should see an image in div id: {div_id}"))
+def i_should_see_an_image_in(div_id):
+    pass
+
+@given(parsers.parse('I browse to: {route}'), target_fixture="page_response")
+def i_browse_to_view(route, client):
+    """I browse to: route."""
+    rv = client.get(route)
     return rv
 
 #@given('I obtain a capture image')
