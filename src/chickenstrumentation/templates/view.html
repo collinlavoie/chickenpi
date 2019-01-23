@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Chickenstrumentation</h1>
+
+<style>
+#table {
+display:table;
+border-spacing:.5em;
+}
+.row {display:table-row; }
+.cell{
+display:table-cell;
+
+}
+</style>
+
+
+<script>
+function capture(id) {
+    document.getElementById(id).innerHTML="picture";
+}
+</script>
+
+{% endblock %}
+
+{% block content %}
+  <div id="camera"></div>
+  <div id="capture" onclick="capture('capture')">capture</div>
+{% endblock %}

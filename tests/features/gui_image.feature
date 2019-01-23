@@ -11,11 +11,21 @@ Scenario: Viewing the page
     When I click the capture button
     Then I should see an image in div id: capture
 
-#Scenario: Viewing the page
-#    Given I obtain the following image from the camera:
-#        filename.gif
-#    And I access the page
-#    Then I should see the following image:
-#        filename.gif
+@todo
+Scenario: Capturing an image
+    Given I browse to: /view/
+    And I click the capture button
+    And I should see an image in the page
 
-# Add Scenario for camera to throw exception on unexpected data from capture
+@todo
+Scenario: Viewing an image in the page
+    Given I obtain the following image from the camera:
+        filename.gif
+    And I browse to: /view/
+    Then I should see the following image:
+        filename.gif
+
+@todo
+Scenario: Camera throws an exception on unexpected capture data
+    Given the camera recieves corrupt data
+    Then the camera raises a ValueError exception

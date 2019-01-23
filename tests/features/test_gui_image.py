@@ -5,6 +5,7 @@ from chickenstrumentation.camera import Reader
 
 import re
 import os
+import time
 from bs4 import BeautifulSoup
 
 from pytest_bdd import (
@@ -20,17 +21,26 @@ from pytest_bdd import (
 def test_viewing_the_page():
     """Viewing the page."""
 
+@scenario('gui_image.feature', 'Capturing an image')
+def test_capturing_an_image():
+    """Capturing an image."""
 
 @given(parsers.parse('I want to interact with web page: {route}'), target_fixture="brower")
 def interact_with_page(server, route, browser):
-    print "Interact with page: {}".format(route)
     url = server.check_url + route
-    print url
     browser.get(url)
-    browser.save_screenshot('screenshot.png')
+    return browser
 
 @when("I click the capture button")
-def i_click_the_capture_button(server, browser):
+def i_click_the_capture_button(interact_with_page):
+    interact_with_page.save_screenshot('{}.before.click.capture.link.png'.format(
+        time.strftime("%Y%m%dT%Hh%Mm%Ss")))
+    interact_with_page.find_element_by_id("capture").click()
+    interact_with_page.save_screenshot('{}.after.click.capture.link.png'.format(
+        time.strftime("%Y%m%dT%Hh%Mm%Ss")))
+
+@then('I should see an image in the page')
+def I_should_see_an_image_in_the_page():
     pass
 
 @then(parsers.parse("I should see an image in div id: {div_id}"))
@@ -58,5 +68,3 @@ def i_should_have_a_div_with_id_capture(page_response, div_id, capture_image):
     soup = BeautifulSoup(html_doc, 'html.parser')
     assert soup.find("div", {"id": div_id})
     assert os.path.exists(capture_image)
-
-

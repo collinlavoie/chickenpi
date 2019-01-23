@@ -22,4 +22,7 @@ Scenario: Viewing the page
     And I access the page
     Then I should see a temperature reading
 
-# Add Scenario for probe to throw exception on unexpected data from reading
+@todo
+Scenario: Camera throws an exception on unexpected capture data
+    Given the camera recieves corrupt data
+    Then the camera raises a ValueError exception

@@ -19,8 +19,7 @@ def web_temp():
 
 @app.route('/view/')
 def view():
-    data = probe.WebReader.get_data()
-    return render_template('temp.html', data=data)
+    return render_template('view.html')
 
 if __name__ == '__main__':
 

@@ -15,6 +15,15 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
 
+def pytest_bdd_apply_tag(tag, function):
+    if tag == 'todo':
+        marker = pytest.mark.skip(reason="Not implemented yet")
+        marker(function)
+        return True
+    else:
+        # Fall back to pytest-bdd's default behavior
+        return None
+
 
 @pytest.fixture
 def camera():
