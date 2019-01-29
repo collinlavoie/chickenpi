@@ -7,28 +7,26 @@ from os.path import expanduser
 
 class Reader(object):
 
-    _base_path = expanduser("~")
+    _base_path = os.path.dirname(os.path.realpath(__file__))
 
     def __init__(self, base_path=None):
         if base_path:
             self._base_path = base_path
 
     def get_image(self):
-        image_path = self.capture_image()
-        return image_path
+        filename = 'image.{}.jpg'.format(time.strftime("%Y%m%dT%Hh%Mm%Ss"))
+        self.capture_image(filename)
+        return filename
 
-    def capture_image(self):
-        image_path = os.path.join(
-                self._base_path,
-                'image.{}.jpg'.format(time.strftime("%Y%m%dT%Hh%Mm%Ss"))
-                )
+    def save_image(self, filename):
+        self.capture_image(filename)
+
+    def capture_image(self, filename):
         with PiCamera() as camera:
             camera.start_preview()
             sleep(2)
-            camera.capture(image_path)
+            camera.capture(os.path.join(self._base_path, filename))
             camera.stop_preview()
 
-        return image_path
-
     def capture_video(self):
-        pass
+        raise NotImplementedError

@@ -1,5 +1,4 @@
 from subprocess import check_output
-import urllib2
 import json
 import re
 

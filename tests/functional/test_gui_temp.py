@@ -15,27 +15,21 @@ from pytest_bdd import (
     parsers,
 )
 
-@scenario('gui.feature', 'Viewing the page')
-def test_viewing_the_page():
+@scenario('../features/gui/temp.feature', 'Temperature probe reading displayed in web page')
+def test_probe_reading_displayed_in_web_page():
     """Viewing the page."""
 
 # Fixtures
 
-@given('The probes read 123')
-def the_probes_read_123():
-    """The probes read 123"""
-
-
 @given(parsers.parse('The probes read:\n{text}'))
 @given(parsers.parse('The probes read: {text}'))
-def probes_reading(text):
-    return text
-
-@given('I access the page', target_fixture="page_response")
-def i_access_the_page(mocker, client, probes_reading):
+def probes_reading(mocker, text):
     mocker.patch("chickenstrumentation.app.probe.Reader.read_probes")
-    Reader.read_probes.return_value = probes_reading
-    rv = client.get('/temp/')
+    Reader.read_probes.return_value = text
+
+@given(parsers.parse('I browse to: {route}'), target_fixture="page_response")
+def i_browse_to_view(client, route):
+    rv = client.get(route)
     return rv
 
 @then(parsers.parse('I should have a div with id: {div_id}'))
@@ -48,7 +42,7 @@ def i_have_div_with_id(page_response, div_id):
 def i_should_see_temperature(page_response, temp):
     html_doc = page_response.data
     soup = BeautifulSoup(html_doc, 'html.parser')
-    assert re.match(ur"1.12 \u2103", soup.find("div", {"id": "temp"}).text)
+    assert re.match(ur"{} \u2103".format(temp), soup.find("div", {"id": "temp"}).text)
 
 @then('I should see a temperature reading')
 def i_see_a_temp_reading(page_response):

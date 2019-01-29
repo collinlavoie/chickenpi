@@ -16,15 +16,37 @@ display:table-cell;
 </style>
 
 
-<script>
-function capture(id) {
-    document.getElementById(id).innerHTML="picture";
-}
+<script type=text/javascript src="{{
+  url_for('static', filename='jquery.min.js') }}"></script>
+
+<script>window.jQuery || document.getElementById("camera").innerHTML="broken";</script>
+<script type=text/javascript>
+
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+  $(function() {
+    $('div#capture').bind('click', function() {
+      $("div#camera").text('Taking picture');
+      $.ajax({ url:     $SCRIPT_ROOT + '/capture_image/',
+               success: function(data) {
+                   random = {{ range(1, 10000) | random }}
+                   url = data + '?' + random
+                   $("div#camera").html('<img id="picture" height="216" src="'+url+'" />');
+                        },
+               error: function(data) {
+                          $("div#camera").text('Capture failed.');
+                        }
+      });
+      return false;
+   });
+
+  });
+
 </script>
 
 {% endblock %}
 
 {% block content %}
-  <div id="camera"></div>
-  <div id="capture" onclick="capture('capture')">capture</div>
+<div style="height: 216px; width:512px; border-style: inset;" id="camera"></div>
+  <div style="border-style: outset; margin: 1 em; width: 5em" id="capture">Capture</div>
 {% endblock %}

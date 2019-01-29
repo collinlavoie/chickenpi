@@ -4,6 +4,7 @@ import tempfile
 import shutil
 import pytest
 import requests
+import time
 
 import liveandletdie
 
@@ -14,6 +15,8 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
+
+from PIL import Image, ImageDraw
 
 def pytest_bdd_apply_tag(tag, function):
     if tag == 'todo':
@@ -33,22 +36,6 @@ def camera():
     yield camera
 
     shutil.rmtree(app.config['CAMERA'])
-
-#class MyTest(LiveServerTestCase):
-
-#    def create_app(self):
-#
-#        app = Flask(__name__)
-#        app.config['TESTING'] = True
-#        # Default port is 5000
-#        app.config['LIVESERVER_PORT'] = 8943
-#        # Default timeout is 5 seconds
-#        app.config['LIVESERVER_TIMEOUT'] = 10
-#        return app
-#
-#    def test_server_is_up_and_running(self):
-#        response = urllib2.urlopen(self.get_server_url())
-#        self.assertEqual(response.code, 200)
 
 @pytest.fixture
 def server():
@@ -88,3 +75,22 @@ def client():
 
     os.close(db_fd)
     os.unlink(app.config['DATABASE'])
+
+def take_mock_picture():
+    now = time
+    image_path = 'mock_image{}.jpg'.format(now.strftime("%Y%m%dT%Hh%Mm%Ss"))
+    img = Image.new('RGB', (150, 200), color = (73, 109, 137))
+    d = ImageDraw.Draw(img)
+    d.text((10,10),
+           "Hello Chicken\n\n{}".format(now.strftime("%F %T")),
+           fill=(255,255,0))
+    img.save(image_path)
+    return image_path
+
+@pytest.fixture
+def mock_camera(mocker):
+    mocker.patch("chickenstrumentation.camera.Reader.capture_image", side_effect=take_mock_picture)
+    mock_camera = Reader()
+    print "mock_camera", mock_camera
+    yield mock_camera
+    del mock_camera

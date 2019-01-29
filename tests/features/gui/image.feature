@@ -1,13 +1,14 @@
 Feature: Camera imaging in web page
     Images can be obtained from the camera through the web interface
 
-#Scenario: Viewing the page
-#    Given I access the page
-#    Then I should have a div with id: camera
-#   And I should have a div with id: capture
+Scenario: Capture image route
+    Given The app uses a mock camera
+    And I browse to: /capture_image/
+    Then I should see a path to a captured image
 
-Scenario: Viewing the page
-    Given I want to interact with web page: /view/ 
+Scenario: Clicking capture button displays an image in the page
+    Given The app uses a mock camera
+    And I interact with web page: /view/
     When I click the capture button
     Then I should see an image in div id: capture
 
