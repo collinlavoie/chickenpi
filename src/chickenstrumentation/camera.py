@@ -1,4 +1,7 @@
-from picamera import PiCamera
+try:
+   from picamera import PiCamera
+except:
+    print "Could not import picamera"
 import time
 from time import sleep
 import os
