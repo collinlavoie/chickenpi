@@ -6,6 +6,10 @@ RUN pip install pytest-bdd
 RUN pip install pytest-flask
 RUN pip install pytest-mock
 RUN pip install bs4
+RUN pip install pillow
+RUN pip install selenium
+RUN wget $(echo http://github.com$(curl -sL  https://github.com/mozilla/geckodriver/releases/latest | grep -Eo '/mozilla.*linux64.tar.gz'))
+RUN tar -xvzf geckodriver-*.tar.gz && rm geckodriver-*.tar.gz
 RUN pip install --upgrade pip
 RUN mkdir /var/run/sshd
 RUN echo 'root:secretpassword' | chpasswd
