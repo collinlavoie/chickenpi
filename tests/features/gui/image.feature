@@ -6,6 +6,9 @@ Scenario: Capture image route
     And I browse to: /capture_image/
     Then I should see a path to a captured image
 
+# This scenario does not use the mcck camera. Need to find a way
+# to mock when using a live server and browser for interaction
+@todo
 Scenario: Clicking capture button displays an image in the page
     Given The app uses a mock camera
     And I interact with web page: /view/

@@ -37,6 +37,7 @@ def camera():
 
     shutil.rmtree(app.config['CAMERA'])
 
+# need another version with a mock camera
 @pytest.fixture
 def server():
     running_app = liveandletdie.Flask("src/chickenstrumentation/app.py")
@@ -76,10 +77,17 @@ def client():
     os.close(db_fd)
     os.unlink(app.config['DATABASE'])
 
-def take_mock_picture():
+def take_mock_picture(filename=None):
+    # This method should not have to know where the capture folder is.
+    # The problem is that this function cannot have insight into
+    # the mock camera object, which holds this information.
+    # The design should be revisited
+    capture_folder = "src/chickenstrumentation/capture/"
     now = time
-    image_path = 'mock_image{}.jpg'.format(now.strftime("%Y%m%dT%Hh%Mm%Ss"))
-    img = Image.new('RGB', (150, 200), color = (73, 109, 137))
+    if not filename:
+        filename = 'mock_image{}.jpg'.format(now.strftime("%Y%m%dT%Hh%Mm%Ss"))
+    image_path = os.path.join(capture_folder, filename)
+    img = Image.new('RGB', (512, 216), color = (73, 109, 137))
     d = ImageDraw.Draw(img)
     d.text((10,10),
            "Hello Chicken\n\n{}".format(now.strftime("%F %T")),
@@ -90,7 +98,10 @@ def take_mock_picture():
 @pytest.fixture
 def mock_camera(mocker):
     mocker.patch("chickenstrumentation.camera.Reader.capture_image", side_effect=take_mock_picture)
-    mock_camera = Reader()
-    print "mock_camera", mock_camera
+    capture_folder = tempfile.mkdtemp()
+    mock_camera = Reader(capture_folder)
+
     yield mock_camera
+
+    shutil.rmtree(capture_folder)
     del mock_camera

@@ -5,7 +5,7 @@ Scenario: Obtain images from a real camera
     Given An image is obtained from the camera
     Then The image should be saved to a file
 
-@todo 
+@todo
 Scenario: Obtain video from a real camera
-    Given An image is obtained from the camera
-    Then The image should be saved to a file
+    Given An video stream is obtained from the camera
+    Then The stream should be be broadcast

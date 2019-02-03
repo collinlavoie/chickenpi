@@ -14,7 +14,7 @@ Scenario: Obtaining bad data from the probes
         xxxx-01-13 22:30:01,28-0000079ff834,7.125
     Then I obtain the following data:
         []
-    
+
 Scenario: Obtaining good and bad data from the probes
     Given I have a mock probe
     And I obtain the reading:
