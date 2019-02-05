@@ -1,6 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y openssh-server python python-flask python-pip git vim tmux
+RUN apt-get install -y curl
 RUN pip install -U pytest
 RUN pip install pytest-bdd
 RUN pip install pytest-flask
@@ -8,7 +9,13 @@ RUN pip install pytest-mock
 RUN pip install bs4
 RUN pip install pillow
 RUN pip install selenium
-RUN wget $(echo http://github.com$(curl -sL  https://github.com/mozilla/geckodriver/releases/latest | grep -Eo '/mozilla.*linux64.tar.gz'))
+RUN cat /proc/cpuinfo
+RUN grep -q Intel /proc/cpuinfo; \
+    if [ $? -eq 0 ]; \
+    then export PLATFORM=linux64; \
+    else export PLATFORM=arm7hf; \
+    fi ; \
+    wget $(echo http://github.com$(curl -sL  https://github.com/mozilla/geckodriver/releases/tag/v0.23.0 | grep -Eo "/mozilla.*$PLATFORM.tar.gz"))
 RUN tar -xvzf geckodriver-*.tar.gz && rm geckodriver-*.tar.gz
 RUN pip install --upgrade pip
 RUN mkdir /var/run/sshd
