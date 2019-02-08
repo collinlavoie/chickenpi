@@ -6,3 +6,4 @@
         co = checkout
         b = branch
         c = commit
+        adog = log --all --decorate --oneline --graph -50
