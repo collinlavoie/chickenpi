@@ -5,7 +5,7 @@ import re
 class Reader(object):
 
     PROBE_BIN="../bin/get_temp.sh"
-    SAMPLE_PATTERN=r'\d{4}(-\d\d){2} (\d\d:){2}\d\d,[0-9a-fA-F]{2}-[0-9a-fA-F]{12},\d\.\d\d'
+    SAMPLE_PATTERN=r'\d{4}(-\d\d){2} (\d\d:){2}\d\d,[0-9a-fA-F]{2}-[0-9a-fA-F]{12},-?\d*\.\d\d'
 
     @classmethod
     def get_data(cls):
@@ -20,6 +20,10 @@ class Reader(object):
     @classmethod
     def read_probes(cls):
         try:
-            return check_output([cls.PROBE_BIN])
-        except:
+            import os
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            fullpath = os.path.join(current_dir, cls.PROBE_BIN)
+            return check_output([fullpath])
+        except Exception, e:
+            print e
             return ""
