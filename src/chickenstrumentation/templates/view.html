@@ -19,27 +19,43 @@ display:table-cell;
 <script type=text/javascript src="{{
   url_for('static', filename='jquery.min.js') }}"></script>
 
-<script>window.jQuery || document.getElementById("camera").innerHTML="broken";</script>
 <script type=text/javascript>
 
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
   $(function() {
     $('div#capture').bind('click', function() {
-      $("div#camera").text('Taking picture');
+      $("div#viewport").text('Taking picture');
       $.ajax({ url:     $SCRIPT_ROOT + '/capture_image/',
                success: function(data) {
                    random = {{ range(1, 10000) | random }}
                    url = data + '?' + random
-                   $("div#camera").html('<img id="picture" height="216" src="'+url+'" />');
+                   $("div#viewport").html('<img id="picture" src="'+url+'" />');
                         },
                error: function(data) {
-                          $("div#camera").text('Capture failed.');
+                          $("div#viewport").text('Capture failed.');
                         }
       });
       return false;
-   });
+    });
 
+    $('div#stream').bind('click', function() {
+      $("div#viewport").text('Capturing video');
+      $.ajax({ url:     $SCRIPT_ROOT + '/capture_video/',
+               success: function(data) {
+                   random = {{ range(1, 10000) | random }}
+                   url = data + '?' + random
+                   $("div#viewport").html('<video controls><source src="'+url+'" type="video/mp4" />');
+                   video = $("div#viewport video")[0];
+                   video.load();
+                   video.play();
+                        },
+               error: function(data) {
+                          $("div#viewport").text('Streaming failed.');
+                        }
+      });
+      return false;
+    });
   });
 
 </script>
@@ -47,6 +63,10 @@ display:table-cell;
 {% endblock %}
 
 {% block content %}
-<div style="height: 216px; width:512px; border-style: inset;" id="camera"></div>
-  <div style="border-style: outset; margin: 1 em; width: 5em" id="capture">Capture</div>
+<div style="float: left; border-style: outset; margin: 1em; width: 8em" id="capture">Take picture</div>
+<div style="float: left; border-style: outset; margin: 1em; width: 8em" id="stream">Capture video</div>
+<div style="float: none; clear: both;" />
+<hr />
+<div style="margin: 1 em;" id="viewport"></div>
+
 {% endblock %}

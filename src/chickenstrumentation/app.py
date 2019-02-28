@@ -31,14 +31,20 @@ def view():
 
 @app.route('/capture/<filename>')
 def uploaded_file(filename):
-        return send_from_directory(app.config['UPLOAD_FOLDER'],
-                                               filename)
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/capture_image/')
 def capture_image():
     capture_folder = os.path.join(app.config['APP_HOME'], app.config['UPLOAD_FOLDER'])
     camera_reader = camera.Reader(capture_folder)
     filename  = camera_reader.get_image()
+    return os.path.join('/', app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/capture_video/')
+def capture_video():
+    capture_folder = os.path.join(app.config['APP_HOME'], app.config['UPLOAD_FOLDER'])
+    camera_reader = camera.Reader(capture_folder)
+    filename  = camera_reader.get_video()
     return os.path.join('/', app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
