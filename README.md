@@ -11,9 +11,24 @@
 ## Download code
 
     $ sudo apt install git -y
-    $ git clone https://github.com/collinlavoie/chickenstrumentation.git
+    $ git clone https://github.com/collinlavoie/chickenpi.git
+    $ cd chickenpi
+
+## Select environment
+
+### Application
+
+    $ cd docker/app/
+
+### Development
+
+    $ cd docker/dev/
 
 ## Build image
 
-    $ cd chickenstrumentation/docker/app/
-    $ sudo docker build -t chickenpi:raspbian.stretch.$(date +%Y.%m.%d) .
+    $ image="chickenpi:raspbian.stretch.$(date +%Y.%m.%d)"
+    $ sudo docker build -t ${image} .
+
+# Run
+
+    $ sudo docker run -d -p 80:5000 -p 2222:22 --device=/dev/vchiq ${image}
