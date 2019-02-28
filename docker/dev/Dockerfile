@@ -1,6 +1,6 @@
 ARG DOCKER_IMAGE=raspbian/stretch
 FROM $DOCKER_IMAGE
-RUN apt-get update && apt-get install -y openssh-server python python-pip git vim tmux curl wget python-dev python-setuptools zlib1g-dev libjpeg-dev python-picamera raspi-config
+RUN apt-get update && apt-get install -y openssh-server python python-pip git vim tmux curl wget python-dev python-setuptools zlib1g-dev libjpeg-dev python-picamera raspi-config gpac
 
 RUN echo "dtoverlay=w1-gpio" >> /boot/config.txt
 RUN echo "gpu_mem=128" >> /boot/config.txt

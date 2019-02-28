@@ -44,6 +44,7 @@ class Reader(object):
         _, h264_file = tempfile.mkstemp(suffix='.h264')
         try:
             with PiCamera() as camera:
+                camera.resolution = (1024, 768)
                 camera.start_recording(h264_file)
                 camera.wait_recording(5)
                 camera.stop_recording()
