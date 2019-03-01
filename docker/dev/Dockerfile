@@ -26,6 +26,9 @@ COPY .tmux.conf /etc/skel/.tmux.conf
 COPY .gitconfig /etc/skel/.gitconfig
 RUN git clone https://github.com/collinlavoie/chickenpi.git /etc/skel/chickenpi
 
+COPY .vimrc etc/skel/.vimrc
+COPY vimrc.local /etc/vim/vimrc.local
+
 RUN useradd -m -s /bin/bash developer
 RUN echo 'developer:mysecretpassword' | chpasswd
 RUN for group in adm dialout cdrom sudo audio video plugdev games users input netdev pi spi i2c gpio; do sed -i "/^${group}/ s/$/developer/" /etc/group; done
