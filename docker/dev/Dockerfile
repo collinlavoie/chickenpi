@@ -19,12 +19,12 @@ RUN grep -q Intel /proc/cpuinfo; \
 RUN tar -xvzf geckodriver-*.tar.gz && rm geckodriver-*.tar.gz
 
 RUN echo "alias g=git" >> /etc/skel/.bash_aliases
-RUN echo 'alias chickenpi="cd ~/chickenstrumentation/;FLASK_APP=src/chickenstrumentation/app.py FLASK_ENV=development flask run --host=0.0.0.0"' >> /etc/skel/.bash_aliases
+RUN echo 'alias chickenstrumentation="cd ~/chickenpi/;FLASK_APP=src/chickenstrumentation/app.py FLASK_ENV=development flask run --host=0.0.0.0"' >> /etc/skel/.bash_aliases
 RUN echo "export PYTHONPATH=src/" >> /etc/skel/.bashrc
 RUN sed -i 's/%sudo.*ALL=(ALL:ALL).*ALL/%sudo   ALL=NOPASSWD:ALL/g' /etc/sudoers
 COPY .tmux.conf /etc/skel/.tmux.conf
 COPY .gitconfig /etc/skel/.gitconfig
-RUN git clone https://github.com/collinlavoie/chickenstrumentation.git /etc/skel/chickenstrumentation
+RUN git clone https://github.com/collinlavoie/chickenpi.git /etc/skel/chickenpi
 
 RUN useradd -m -s /bin/bash developer
 RUN echo 'developer:mysecretpassword' | chpasswd
