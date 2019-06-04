@@ -1,0 +1,18 @@
+version: '3'
+services:
+  redis:
+    # image: "arm32v7/redis"
+    image: "redis"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    # Needs to be enabled on host system to work
+    # sysctls:
+    #   - vm.overcommit_memory=1
+  app:
+    image: "chickenpi-dev:2019.05.23"
+    ports:
+      - "80:5000"
