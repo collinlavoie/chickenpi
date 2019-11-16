@@ -1,4 +1,4 @@
-ARG DOCKER_IMAGE=raspbian/stretch
+ARG DOCKER_IMAGE=ubuntu:latest
 FROM $DOCKER_IMAGE
 
 RUN apt-get update && apt-get install -y \
