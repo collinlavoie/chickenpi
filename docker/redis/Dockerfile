@@ -1,6 +1,4 @@
-ARG DOCKER_IMAGE=raspbian/stretch
-FROM $DOCKER_IMAGE
-
+FROM raspbian/stretch
 RUN apt-get update && apt-get install -y openssh-server python python-pip git
 RUN pip install Flask
 RUN pip install --upgrade pip

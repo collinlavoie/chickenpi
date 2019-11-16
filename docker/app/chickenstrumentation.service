@@ -1,0 +1,13 @@
+[Unit]
+Description=Chicken Monitoring System
+After=network.target
+
+[Service]
+User=chickenpi
+ExecStart=/home/chickenpi/chickenstrumentation/src/chickenstrumentation/app.py
+WorkingDirectory=/home/chickenpi/chickenstrumentation/
+Restart=on-failure
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
